@@ -1,6 +1,18 @@
 import { baseURL } from "./url.js";
 
 $(document).ready(function () {
+	$("#username").on("keypress", function (e) {
+		var code = e.keyCode || e.which;
+		if (code == 13) {
+			$("#btnLogin").click();
+		}
+	});
+	$("#password").on("keypress", function (e) {
+		var code = e.keyCode || e.which;
+		if (code == 13) {
+			$("#btnLogin").click();
+		}
+	});
 	$("#btnLogin").click(function () {
 		var user = $("#username").val();
 		var pass = $("#password").val();
