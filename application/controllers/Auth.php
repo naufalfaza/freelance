@@ -21,7 +21,7 @@ class Auth extends CI_Controller
                 "pages" => "login"
             );
             $this->load->view('structures/header', $data);
-            $this->load->view('pages/login');
+            $this->load->view('login/login');
             $this->load->view('structures/footer');
         } else {
             if ($sessionRole == 1) {
@@ -40,7 +40,7 @@ class Auth extends CI_Controller
             "pages" => $pages
         );
         $this->load->view('structures/header', $data);
-        $this->load->view('pages/' . $pages);
+        $this->load->view('login/' . $pages);
         $this->load->view('structures/footer');
     }
 
