@@ -107,6 +107,7 @@ class Auth extends CI_Controller
     public function authRegis()
     {
         $name = $this->input->post("name");
+        $no_telp = $this->input->post("no_telp");
         $email = $this->input->post("email");
         $username = $this->input->post("user");
         $password = $this->input->post("pass");
@@ -118,7 +119,7 @@ class Auth extends CI_Controller
                 "id_user" => $this->M_data->generateIdUser(),
                 "nama" => $name,
                 "email" => $email,
-                "no_telp" => "",
+                "no_telp" => $no_telp,
                 "username" => $username,
                 "password" => password_hash($password, PASSWORD_DEFAULT),
                 "id_role" => 2,

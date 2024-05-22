@@ -3,6 +3,7 @@ import { baseURL } from "./url.js";
 $(document).ready(function () {
 	$("#btnRegis").click(function () {
 		var name = $("#name").val();
+		var no_telp = $("#no_telp").val();
 		var email = $("#email").val();
 		var user = $("#username").val();
 		var pass = $("#password").val();
@@ -11,6 +12,7 @@ $(document).ready(function () {
 			type: "POST",
 			data: {
 				name: name,
+				no_telp: no_telp,
 				email: email,
 				user: user,
 				pass: pass,

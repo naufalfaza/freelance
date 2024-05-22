@@ -9,7 +9,7 @@
                         <div class="d-flex justify-content-center py-4">
                             <a href="<?= base_url('Auth') ?>" class="logo d-flex align-items-center w-auto">
                                 <img src="<?= base_url('/assets/img/logo.png') ?>" alt="">
-                                <span class="d-none d-lg-block">Studio Apps</span>
+                                <span class="d-none d-lg-block">Toko Melly</span>
                             </a>
                         </div><!-- End Logo -->
 

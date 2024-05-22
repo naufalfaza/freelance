@@ -4,18 +4,18 @@
      <ul class="sidebar-nav" id="sidebar-nav">
 
          <li class="nav-item">
-             <a class="nav-link " href="index.html">
+             <a class="nav-link " href="<?= base_url('/User') ?>">
                  <i class="bi bi-grid"></i>
                  <span>Home</span>
              </a>
-         </li><!-- End Dashboard Nav -->
+         </li>
 
-         <li class="nav-item">
+         <!-- <li class="nav-item">
              <a class="nav-link " href="<?= base_url('Auth/authLogout') ?>">
                  <i class="bi bi-door-open"></i>
                  <span>Logout</span>
              </a>
-         </li><!-- End Dashboard Nav -->
+         </li> -->
      </ul>
 
  </aside><!-- End Sidebar-->

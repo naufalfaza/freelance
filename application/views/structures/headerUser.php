@@ -36,6 +36,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="<?= base_url('/assets/js/pages/' . $pages . '.js') ?>" type="module"></script>
 
+    <!-- Datatables -->
+    <link href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css" rel="stylesheet">
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
+
 </head>
 
 <body class="toggle-sidebar">
