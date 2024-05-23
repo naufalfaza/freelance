@@ -41,6 +41,14 @@ class M_data extends CI_Model
         $this->db->where("id_user='$id_user'");
         return $this->db->get();
     }
+
+    function dataJmlKeranjang($id_user)
+    {
+        $this->db->select("COUNT(id_keranjang) as jumlah");
+        $this->db->from("tbl_keranjang");
+        $this->db->where("id_user='$id_user'");
+        return $this->db->get();
+    }
     // DATA END
 
 

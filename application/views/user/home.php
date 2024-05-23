@@ -127,7 +127,7 @@ if ($this->session->userdata("logged_in") == true) {
                                                     $getUkuran = $this->M_data->dataUkuran()->result();
                                                     foreach ($getUkuran as $dt) {
                                                     ?>
-                                                        <option value="<?= $dt->id_ukuran ?>"><?= $dt->ukuran . " - Rp. " . number_format($dt->harga, 2, ',', '.') ?></option>
+                                                        <option value="<?= $dt->id_ukuran ?>"><?= $dt->ukuran . " - Rp. " . number_format($dt->harga, 0, ',', '.') ?></option>
                                                     <?php
                                                     }
                                                     ?>
@@ -143,7 +143,7 @@ if ($this->session->userdata("logged_in") == true) {
                                             </div>
                                             <br>
                                             <div class="text-center">
-                                                <button type="submit" class="btn btn-primary" <?= $btn ?>><i class="bi bi-cart-plus-fill me-1"></i>Masukan Keranjang</button>
+                                                <button type="submit" class="btn btn-primary" <?= $btn ?>><i class="bi bi-cart-plus-fill me-1"></i> Keranjang</button>
                                             </div>
                                         </div>
                                     </div>
@@ -157,16 +157,22 @@ if ($this->session->userdata("logged_in") == true) {
                             $get = $this->M_data->dataFrame()->result();
                             foreach ($get as $dt) {
                             ?>
-                                <div class="col-lg-3">
+                                <div class="col-lg-2">
                                     <div class="card">
-                                        <img src="<?= base_url('/assets/img/frame/' . $dt->image) ?>" class="card-img-top" alt="...">
+                                        <img src="<?= base_url('/assets/img/barang/' . $dt->image) ?>" class="card-img-top" alt="...">
                                         <div class="card-body">
-                                            <h5 class="card-title"><?= $dt->nm_barang ?></h5>
+                                            <h5 class="card-title"><?= (str_word_count($dt->nm_barang) > 5) ? substr($dt->nm_barang, 0, 20) . "..." : $dt->nm_barang ?></h5>
                                             <!-- <p class="card-text"><?= $dt->deskripsi ?></p> -->
-                                            <h6 class="text-danger"><b>Stok <?= $dt->stok ?></b></h6>
+                                            <div class="row p-0">
+                                                <div class="col-lg-8">
+                                                    <p style="text-align: left; font-size: 18px; font-weight: bold; color: #0d6efd;"><b>Rp. <?= number_format($dt->harga, 0, ',', '.')  ?></b></p>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <p style="text-align: right; font-size: 11px; font-weight: bold;">Stok <?= $dt->stok ?></p>
+                                                </div>
+                                            </div>
                                             <div class="text-center">
-                                                <h4><b>Rp. <?= number_format($dt->harga, 2, ',', '.')  ?></b></h4>
-                                                <button type="submit" class="btn btn-primary" <?= $btn ?>><i class="bi bi-cart-plus-fill me-1"></i>Masukan Keranjang</button>
+                                                <button type="submit" class="btn btn-primary" <?= $btn ?>><i class="bi bi-cart-plus-fill me-1"></i> Keranjang</button>
                                             </div>
                                         </div>
                                     </div>
@@ -182,16 +188,22 @@ if ($this->session->userdata("logged_in") == true) {
                             $get = $this->M_data->dataAtk()->result();
                             foreach ($get as $dt) {
                             ?>
-                                <div class="col-lg-3">
+                                <div class="col-lg-2">
                                     <div class="card">
-                                        <img src="<?= base_url('/assets/img/atk/' . $dt->image) ?>" class="card-img-top" alt="...">
+                                        <img src="<?= base_url('/assets/img/barang/' . $dt->image) ?>" class="card-img-top" alt="...">
                                         <div class="card-body">
-                                            <h5 class="card-title"><?= $dt->nm_barang ?></h5>
+                                            <h5 class="card-title"><?= (str_word_count($dt->nm_barang) > 5) ? substr($dt->nm_barang, 0, 20) . "..." : $dt->nm_barang ?></h5>
                                             <!-- <p class="card-text"><?= $dt->deskripsi ?></p> -->
-                                            <h6 class="text-danger"><b>Stok <?= $dt->stok ?></b></h6>
+                                            <div class="row p-0">
+                                                <div class="col-lg-8">
+                                                    <p style="text-align: left; font-size: 18px; font-weight: bold; color: #0d6efd;"><b>Rp. <?= number_format($dt->harga, 0, ',', '.')  ?></b></p>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <p style="text-align: right; font-size: 11px; font-weight: bold;">Stok <?= $dt->stok ?></p>
+                                                </div>
+                                            </div>
                                             <div class="text-center">
-                                                <h4><b>Rp. <?= number_format($dt->harga, 2, ',', '.')  ?></b></h4>
-                                                <button type="submit" class="btn btn-primary" <?= $btn ?>><i class="bi bi-cart-plus-fill me-1"></i>Masukan Keranjang</button>
+                                                <button type="submit" class="btn btn-primary" <?= $btn ?>><i class="bi bi-cart-plus-fill me-1"></i> Keranjang</button>
                                             </div>
                                         </div>
                                     </div>

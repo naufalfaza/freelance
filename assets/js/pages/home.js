@@ -18,6 +18,14 @@ $(document).ready(function () {
 		});
 	}
 
+	$.ajax({
+		url: baseURL + "/User/getJmlKeranjang",
+		success: function (data) {
+			data = JSON.parse(data);
+			$("#jmlKeranjang").html(data.jumlah);
+		},
+	});
+
 	$("#qty").on("keyup", function () {
 		var qty = this.value;
 		var id_ukuran = $("#ukuran_foto").val();

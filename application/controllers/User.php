@@ -73,7 +73,7 @@ class User extends CI_Controller
         $get = $this->M_data->getWhere("tbl_ukuran", array("id_ukuran" => $id_ukuran))->row();
         $total = $qty * $get->harga;
         $res = array(
-            "total" => "Rp. " . number_format($total, 2, ',', '.'),
+            "total" => "Rp. " . number_format($total, 0, ',', '.'),
             "totall" => $total,
         );
         echo json_encode($res);
@@ -144,9 +144,56 @@ class User extends CI_Controller
                 $qty = $cetak->qty;
                 $total = $qty * $harga;
                 $btn = '<button type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button>';
+            } else {
+                $cetak = $this->M_data->getWhere("tbl_cetak", array("id_cetak" => $dt->pesanan))->row();
+                $barang = $this->M_data->getWhere("tbl_barang", array("id_barang" => $cetak->id_ukuran))->row();
+                $link =  base_url("/assets/img/barang/" . $barang->image);
+                $image = '<img src="' . $link . '" width="60%">';
+                $nm = $barang->nm_barang;
+                $harga = $barang->harga;
+                $qty = $cetak->qty;
+                $total = $qty * $harga;
+                $btn = '<button type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button>';
             }
-            array_push($array["data"], array($no++, $image, $nm, "Rp. " . number_format($harga, 2, ',', '.'), $qty, "Rp. " . number_format($total, 2, ',', '.'), $btn));
+            array_push($array["data"], array($no++, $image, $nm, "Rp. " . number_format($harga, 0, ',', '.'), $qty, "Rp. " . number_format($total, 0, ',', '.'), $btn));
         }
         echo json_encode($array);
+    }
+
+    public function getJmlKeranjang()
+    {
+        $id_user = $this->session->userdata("id_user");
+        $get = $this->M_data->dataJmlKeranjang($id_user)->row()->jumlah;
+        $res = array(
+            "jumlah" => $get
+        );
+        echo json_encode($res);
+    }
+
+    public function getTotalKeranjang()
+    {
+        $id_user = $this->session->userdata("id_user");
+        $get = $this->M_data->dataKeranjang($id_user)->result();
+        $no = 1;
+        $total = 0;
+        foreach ($get as $dt) {
+            if (substr($dt->pesanan, 0, 3) == "CTK") {
+                $cetak = $this->M_data->getWhere("tbl_cetak", array("id_cetak" => $dt->pesanan))->row();
+                $ukuran = $this->M_data->getWhere("tbl_ukuran", array("id_ukuran" => $cetak->id_ukuran))->row();
+                $harga = $ukuran->harga;
+                $qty = $cetak->qty;
+                $total += $qty * $harga;
+            } else {
+                $cetak = $this->M_data->getWhere("tbl_cetak", array("id_cetak" => $dt->pesanan))->row();
+                $barang = $this->M_data->getWhere("tbl_barang", array("id_barang" => $cetak->id_ukuran))->row();
+                $harga = $barang->harga;
+                $qty = $cetak->qty;
+                $total += $qty * $harga;
+            }
+        }
+        $res = array(
+            "total" => number_format($total, 0, ',', '.')
+        );
+        echo json_encode($res);
     }
 }

@@ -25,7 +25,7 @@
 
                     <a class="nav-link nav-icon" href="<?= base_url("/User/pages?p=" . base64_encode("keranjang")) ?>">
                         <i class="bi bi-cart"></i>
-                        <span class="badge bg-primary badge-number">4</span>
+                        <span class="badge bg-primary badge-number" id="jmlKeranjang"></span>
                     </a><!-- End Notification Icon -->
 
                 </li><!-- End Notification Nav -->

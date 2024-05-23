@@ -4,11 +4,11 @@
             <div class="pagetitle">
                 <h1>Keranjang</h1>
             </div><!-- End Page Title -->
-            <div class="col-lg-12 mb-4">
+            <div class="col-lg-9 mb-4">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Keranjang Pesanan</h5>
-                        <table id="tableKeranjang" class="display" style="width:100%">
+                        <table id="tableKeranjang" class="hover" style="width:100%">
                             <thead>
                                 <tr>
                                     <th width="5%">No</th>
@@ -17,10 +17,22 @@
                                     <th width="10%">Harga</th>
                                     <th width="10%">Qty</th>
                                     <th width="10%">Total</th>
-                                    <th width="10%">#</th>
+                                    <th width="10%">Aksi</th>
                                 </tr>
                             </thead>
                         </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Checkout</h5>
+                        <h5 id="jmlKeranjang2"></h5>
+                        <h5 id="totalKeranjang"></h5>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success"><i class="bi bi-cart-check-fill me-1"></i> Checkout</button>
+                        </div>
                     </div>
                 </div>
             </div>
