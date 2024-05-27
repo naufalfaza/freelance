@@ -1,6 +1,8 @@
 import { baseURL } from "./url.js";
 
 $(document).ready(function () {
+	$(".input-spinner").inputSpinner();
+
 	var id_user = $("#id_user").val();
 	if (id_user != null) {
 		$.ajax({
@@ -71,8 +73,6 @@ $(document).ready(function () {
 						title: data.message,
 						showConfirmButton: false,
 						timer: 2000,
-					}).then((result) => {
-						// location.reload();
 					});
 				}
 			},

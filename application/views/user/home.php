@@ -7,6 +7,7 @@ if ($this->session->userdata("logged_in") == true) {
     $form = "";
 }
 ?>
+<?= $this->session->flashdata("success"); ?>
 <main id="main" class="main">
     <section class="section dashboard">
         <div class="row">
@@ -56,23 +57,44 @@ if ($this->session->userdata("logged_in") == true) {
             </div><!-- End Page Title -->
             <div class="col-lg-12">
                 <div class="row">
-                    <div class="col-lg-3">
-                        <div class="card">
-                            <img src="<?= base_url('/assets/img/random/no-image.jpg') ?>" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Frame 3x4</h5>
-                                <h6><b>Stok 100</b></h6>
-                                <div class="text-center">
-                                    <h4><b>Rp. 10.000</b></h4>
-                                    <button type="submit" class="btn btn-primary" <?= $btn ?>><i class="bi bi-cart-plus-fill me-1"></i>Masukan Keranjang</button>
-                                </div>
+                    <?php
+                    $get = $this->M_data->dataTerlaris()->result();
+                    foreach ($get as $dt) {
+                    ?>
+                        <div class="col-lg-2">
+                            <div class="card">
+                                <form action="<?= base_url('/User/inputBarang') ?>" method="post">
+                                    <input type="hidden" class="form-control" id="id_user" name="id_user" value="<?= $this->session->userdata('id_user') ?>">
+                                    <input type="hidden" class="form-control" id="id_barang" name="id_barang" value="<?= $dt->id_barang ?>">
+                                    <img src="<?= base_url('/assets/img/barang/' . $dt->image) ?>" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?= (str_word_count($dt->nm_barang) > 5) ? substr($dt->nm_barang, 0, 20) . "..." : $dt->nm_barang ?></h5>
+                                        <!-- <p class="card-text"><?= $dt->deskripsi ?></p> -->
+                                        <div class="row p-0">
+                                            <div class="col-lg-8">
+                                                <p style="text-align: left; font-size: 18px; font-weight: bold; color: #0d6efd;"><b>Rp. <?= number_format($dt->harga, 0, ',', '.')  ?></b></p>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <p style="text-align: right; font-size: 11px; font-weight: bold;">Stok <?= $dt->stok ?></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 mb-3">
+                                            <input type="number" class="form-control input-spinner" name="qtyBrg" id="qtyBrg" value="1" min="1" max="<?= $dt->stok ?>">
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary" <?= $btn ?>><i class="bi bi-cart-plus-fill me-1"></i> Keranjang</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
-                    </div>
+                    <?php
+                    }
+                    ?>
                 </div>
             </div>
             <div class="pagetitle">
-                <h1>Layanan</h1>
+                <h1>Layanan & Produk</h1>
             </div><!-- End Page Title -->
             <div class="col-lg-12 mb-4">
                 <!-- Default Tabs -->
@@ -105,7 +127,7 @@ if ($this->session->userdata("logged_in") == true) {
                                 <div class="col-lg-9">
                                     <div class="card">
                                         <div class="card-body row g-3">
-                                            <h5 class="card-title">Form Pesanan Cetak Foto</h5>
+                                            <h5 class="card-title"><i class="bi bi-list me-1"></i>Form Pesanan Cetak Foto</h5>
                                             <!-- Vertical Form -->
                                             <div class="col-12">
                                                 <label for="inputNanme4" class="form-label">Nama Lengkap</label>
@@ -161,19 +183,26 @@ if ($this->session->userdata("logged_in") == true) {
                                     <div class="card">
                                         <img src="<?= base_url('/assets/img/barang/' . $dt->image) ?>" class="card-img-top" alt="...">
                                         <div class="card-body">
-                                            <h5 class="card-title"><?= (str_word_count($dt->nm_barang) > 5) ? substr($dt->nm_barang, 0, 20) . "..." : $dt->nm_barang ?></h5>
-                                            <!-- <p class="card-text"><?= $dt->deskripsi ?></p> -->
-                                            <div class="row p-0">
-                                                <div class="col-lg-8">
-                                                    <p style="text-align: left; font-size: 18px; font-weight: bold; color: #0d6efd;"><b>Rp. <?= number_format($dt->harga, 0, ',', '.')  ?></b></p>
+                                            <form action="<?= base_url('/User/inputBarang') ?>" method="post">
+                                                <input type="hidden" class="form-control" id="id_user" name="id_user" value="<?= $this->session->userdata('id_user') ?>">
+                                                <input type="hidden" class="form-control" id="id_barang" name="id_barang" value="<?= $dt->id_barang ?>">
+                                                <h5 class="card-title"><?= (str_word_count($dt->nm_barang) > 5) ? substr($dt->nm_barang, 0, 20) . "..." : $dt->nm_barang ?></h5>
+                                                <!-- <p class="card-text"><?= $dt->deskripsi ?></p> -->
+                                                <div class="row p-0">
+                                                    <div class="col-lg-8">
+                                                        <p style="text-align: left; font-size: 18px; font-weight: bold; color: #0d6efd;"><b>Rp. <?= number_format($dt->harga, 0, ',', '.')  ?></b></p>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <p style="text-align: right; font-size: 11px; font-weight: bold;">Stok <?= $dt->stok ?></p>
+                                                    </div>
                                                 </div>
-                                                <div class="col-lg-4">
-                                                    <p style="text-align: right; font-size: 11px; font-weight: bold;">Stok <?= $dt->stok ?></p>
+                                                <div class="col-lg-12 mb-3">
+                                                    <input type="number" class="form-control input-spinner" name="qtyBrg" id="qtyBrg" value="1" min="1" max="<?= $dt->stok ?>">
                                                 </div>
-                                            </div>
-                                            <div class="text-center">
-                                                <button type="submit" class="btn btn-primary" <?= $btn ?>><i class="bi bi-cart-plus-fill me-1"></i> Keranjang</button>
-                                            </div>
+                                                <div class="text-center">
+                                                    <button type="submit" class="btn btn-primary" <?= $btn ?>><i class="bi bi-cart-plus-fill me-1"></i> Keranjang</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -190,22 +219,29 @@ if ($this->session->userdata("logged_in") == true) {
                             ?>
                                 <div class="col-lg-2">
                                     <div class="card">
-                                        <img src="<?= base_url('/assets/img/barang/' . $dt->image) ?>" class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <h5 class="card-title"><?= (str_word_count($dt->nm_barang) > 5) ? substr($dt->nm_barang, 0, 20) . "..." : $dt->nm_barang ?></h5>
-                                            <!-- <p class="card-text"><?= $dt->deskripsi ?></p> -->
-                                            <div class="row p-0">
-                                                <div class="col-lg-8">
-                                                    <p style="text-align: left; font-size: 18px; font-weight: bold; color: #0d6efd;"><b>Rp. <?= number_format($dt->harga, 0, ',', '.')  ?></b></p>
+                                        <form action="<?= base_url('/User/inputBarang') ?>" method="post">
+                                            <input type="hidden" class="form-control" id="id_user" name="id_user" value="<?= $this->session->userdata('id_user') ?>">
+                                            <input type="hidden" class="form-control" id="id_barang" name="id_barang" value="<?= $dt->id_barang ?>">
+                                            <img src="<?= base_url('/assets/img/barang/' . $dt->image) ?>" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><?= (str_word_count($dt->nm_barang) > 5) ? substr($dt->nm_barang, 0, 20) . "..." : $dt->nm_barang ?></h5>
+                                                <!-- <p class="card-text"><?= $dt->deskripsi ?></p> -->
+                                                <div class="row p-0">
+                                                    <div class="col-lg-8">
+                                                        <p style="text-align: left; font-size: 18px; font-weight: bold; color: #0d6efd;"><b>Rp. <?= number_format($dt->harga, 0, ',', '.')  ?></b></p>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <p style="text-align: right; font-size: 11px; font-weight: bold;">Stok <?= $dt->stok ?></p>
+                                                    </div>
                                                 </div>
-                                                <div class="col-lg-4">
-                                                    <p style="text-align: right; font-size: 11px; font-weight: bold;">Stok <?= $dt->stok ?></p>
+                                                <div class="col-lg-12 mb-3">
+                                                    <input type="number" class="form-control input-spinner" name="qtyBrg" id="qtyBrg" value="1" min="1" max="<?= $dt->stok ?>">
+                                                </div>
+                                                <div class="text-center">
+                                                    <button type="submit" class="btn btn-primary" <?= $btn ?>><i class="bi bi-cart-plus-fill me-1"></i> Keranjang</button>
                                                 </div>
                                             </div>
-                                            <div class="text-center">
-                                                <button type="submit" class="btn btn-primary" <?= $btn ?>><i class="bi bi-cart-plus-fill me-1"></i> Keranjang</button>
-                                            </div>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
                             <?php

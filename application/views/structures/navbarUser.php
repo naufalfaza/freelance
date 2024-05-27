@@ -61,7 +61,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                            <a class="dropdown-item d-flex align-items-center" href="<?= base_url("/User/pages?p=" . base64_encode("pesanan_saya")) ?>">
                                 <i class="bi bi-card-checklist"></i>
                                 <span>Pesanan Saya</span>
                             </a>

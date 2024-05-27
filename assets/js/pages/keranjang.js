@@ -7,6 +7,7 @@ $(document).ready(function () {
 			data = JSON.parse(data);
 			$("#jmlKeranjang").html(data.jumlah);
 			$("#jmlKeranjang2").html("Jumlah : " + data.jumlah);
+			$("#jmlKeranjang3").html("Jumlah Pesanan : " + data.jumlah);
 		},
 	});
 
@@ -14,7 +15,11 @@ $(document).ready(function () {
 		url: baseURL + "/User/getTotalKeranjang",
 		success: function (data) {
 			data = JSON.parse(data);
-			$("#totalKeranjang").html("Total : Rp. " + data.total);
+			$("#totalKeranjang").html("Total : <b>Rp. " + data.total + "</b>");
+			$("#totalKeranjang2").html(
+				"Total Pembayaran : <b>Rp. " + data.total + "</b>"
+			);
+			$("#totalll").val(data.total);
 		},
 	});
 
@@ -26,5 +31,64 @@ $(document).ready(function () {
 			footer: true,
 		},
 		ajax: baseURL + "/User/getKeranjang",
+	});
+
+	$("#metodeTransfer").hide();
+	$("#metodeQris").hide();
+	$("#metode").on("change", function () {
+		if ($("#metode").val() == "transfer") {
+			$("#metodeTransfer").show();
+			$("#metodeQris").hide();
+		} else {
+			$("#metodeQris").show();
+			$("#metodeTransfer").hide();
+		}
+	});
+
+	$("#bank").on("change", function () {
+		$.ajax({
+			url: baseURL + "/User/getRekening",
+			type: "post",
+			data: {
+				bank: $("#bank").val(),
+			},
+			success: function (data) {
+				data = JSON.parse(data);
+				$("#no_rekening").val(data.rekening);
+			},
+		});
+	});
+
+	$("#inputTransaksi").submit(function (e) {
+		e.preventDefault();
+		$.ajax({
+			url: baseURL + "/User/inputTransaksi",
+			type: "post",
+			data: new FormData(this),
+			processData: false,
+			contentType: false,
+			cache: false,
+			async: false,
+			success: function (data) {
+				data = JSON.parse(data);
+				if (data.status == true) {
+					Swal.fire({
+						icon: "success",
+						title: "Berhasil!",
+						showConfirmButton: false,
+						timer: 1500,
+					}).then((result) => {
+						location.reload();
+					});
+				} else {
+					Swal.fire({
+						icon: "error",
+						title: data.message,
+						showConfirmButton: false,
+						timer: 2000,
+					});
+				}
+			},
+		});
 	});
 });

@@ -26,15 +26,18 @@
     <link href="<?= base_url('/assets/vendor/remixicon/remixicon.css') ?>" rel="stylesheet">
     <link href="<?= base_url('/assets/vendor/simple-datatables/style.css') ?>" rel="stylesheet">
 
-    <!-- Sweetalert -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <!-- Template Main CSS File -->
     <link href="<?= base_url('/assets/css/style.css') ?>" rel="stylesheet">
 
     <!-- Jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="<?= base_url('/assets/js/pages/' . $pages . '.js') ?>" type="module"></script>
+
+    <!-- Sweetalert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Spinner -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-input-spinner@4.0.1/es5-deprecated/src/bootstrap-input-spinner.min.js"></script>
 
     <!-- Datatables -->
     <link href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css" rel="stylesheet">

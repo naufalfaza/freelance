@@ -2,6 +2,7 @@
 
 class M_data extends CI_Model
 {
+    // CEK
     function cekUser($username)
     {
         $this->db->select("*");
@@ -9,6 +10,7 @@ class M_data extends CI_Model
         $this->db->where("username='$username'");
         return $this->db->get();
     }
+    // END CEK
 
     // DATA
     function dataUkuran()
@@ -34,6 +36,13 @@ class M_data extends CI_Model
         return $this->db->get();
     }
 
+    function dataTerlaris()
+    {
+        $this->db->select("*");
+        $this->db->from("tbl_barang");
+        return $this->db->get();
+    }
+
     function dataKeranjang($id_user)
     {
         $this->db->select("*");
@@ -49,8 +58,47 @@ class M_data extends CI_Model
         $this->db->where("id_user='$id_user'");
         return $this->db->get();
     }
-    // DATA END
 
+    function dataBank()
+    {
+        $this->db->select("*");
+        $this->db->from("tbl_rekening");
+        return $this->db->get();
+    }
+
+    function dataRekening($bank)
+    {
+        $this->db->select("*");
+        $this->db->from("tbl_rekening");
+        $this->db->where("id_rekening='$bank'");
+
+        return $this->db->get();
+    }
+
+    function dataTransaksiProses($id_user)
+    {
+        $this->db->select("*");
+        $this->db->from("tbl_transaksi");
+        $this->db->where("id_user='$id_user' AND status='PEN'");
+        return $this->db->get();
+    }
+
+    function dataTransaksiSelesai($id_user)
+    {
+        $this->db->select("*");
+        $this->db->from("tbl_transaksi");
+        $this->db->where("id_user='$id_user' AND status='APP'");
+        return $this->db->get();
+    }
+
+    function dataTransaksiBatal($id_user)
+    {
+        $this->db->select("*");
+        $this->db->from("tbl_transaksi");
+        $this->db->where("id_user='$id_user' AND status='REJ'");
+        return $this->db->get();
+    }
+    // DATA END
 
     // CRUD
     function getWhere($table, $data)
@@ -69,7 +117,7 @@ class M_data extends CI_Model
         $this->db->update($table, $data);
     }
 
-    function hapus_data($table, $where)
+    function deleteData($table, $where)
     {
         $this->db->where($where);
         $this->db->delete($table);
@@ -105,6 +153,17 @@ class M_data extends CI_Model
         $id = (int) substr($row->id, 4, 4);
         $id++;
         return $new = "KRJ-" . sprintf("%04s", $id);
+    }
+
+    function generateIdTransaksi()
+    {
+        $date = date("ymd");
+        $this->db->select("(SELECT MAX(id_transaksi) FROM tbl_transaksi WHERE id_transaksi LIKE 'TRS-$date%') AS id", FALSE);
+        $query = $this->db->get();
+        $row = $query->row();
+        $id = (int) substr($row->id, 8, 4);
+        $id++;
+        return $new = "TRS-$date" . sprintf("%04s", $id);
     }
     // GENERATE END
 }

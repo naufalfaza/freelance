@@ -146,6 +146,6 @@ class Auth extends CI_Controller
     public function authLogout()
     {
         $this->session->sess_destroy();
-        redirect(base_url("/Auth"));
+        redirect(base_url("/User"));
     }
 }
