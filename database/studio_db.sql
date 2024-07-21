@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 22, 2024 at 08:53 PM
+-- Generation Time: Jul 16, 2024 at 05:37 AM
 -- Server version: 8.0.30
--- PHP Version: 8.1.10
+-- PHP Version: 7.4.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -45,9 +45,10 @@ CREATE TABLE `tbl_barang` (
 --
 
 INSERT INTO `tbl_barang` (`id_barang`, `nm_barang`, `deskripsi`, `jenis`, `harga`, `diskon`, `stok`, `satuan`, `image`, `record`) VALUES
-('BRG-0001', 'Buku Sinar Dunia', 'Buku Sinar Dunia 50 Lembar', 'ATK', 4500, 0, 100, 'Psc', 'buku-sidu.jpg', '2024-05-22 18:25:59'),
-('BRG-0002', 'Pulpen Standard AE7', 'Pulpen Standard AE7 merek no 1 diindonesia', 'ATK', 1800, 0, 50, 'Psc', 'pulpen-standard.jpg', '2024-05-22 18:38:46'),
-('BRG-0003', 'Frame A4 Hitam', 'Frame hitam ukuran A4', 'FRAME', 40000, 0, 20, 'Psc', 'frame-a4.jpg', '2024-05-22 18:47:35');
+('BRG-0001', 'Buku Sinar Dunia Paling Laris', 'Buku Sinar Dunia 50 Lembar', 'ATK', 4500, 0, 100, 'Pcs', 'buku-sidu.jpg', '2024-05-22 18:25:59'),
+('BRG-0002', 'Pulpen Standard AE7 Super Edan Mantap', 'Pulpen Standard AE7 merek no 1 diindonesia', 'ATK', 1800, 0, 50, 'Pcs', 'pulpen-standard.jpg', '2024-05-22 18:38:46'),
+('BRG-0003', 'Frame A4 Hitam', 'Frame hitam ukuran A4', 'FRAME', 40000, 0, 20, 'Pcs', 'frame-a4.jpg', '2024-05-22 18:47:35'),
+('BRG-0004', 'Frame Putih A4', 'Frame Putih Ukuran A4', 'FRAME', 45000, 0, 10, 'Pcs', 'BRG-0004.jpg', '2024-07-16 04:42:28');
 
 -- --------------------------------------------------------
 
@@ -87,13 +88,6 @@ CREATE TABLE `tbl_keranjang` (
   `record` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `tbl_keranjang`
---
-
-INSERT INTO `tbl_keranjang` (`id_keranjang`, `id_user`, `pesanan`, `qty`, `record`) VALUES
-('KRJ-0001', 'USR-0003', 'CTK-0001', 5, '2024-05-22 19:47:05');
-
 -- --------------------------------------------------------
 
 --
@@ -101,12 +95,19 @@ INSERT INTO `tbl_keranjang` (`id_keranjang`, `id_user`, `pesanan`, `qty`, `recor
 --
 
 CREATE TABLE `tbl_rekening` (
-  `id_rekening` int NOT NULL,
+  `id_rekening` varchar(20) NOT NULL,
   `no_rekening` varchar(25) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `nama_bank` varchar(25) DEFAULT NULL,
   `atas_nama` varchar(25) DEFAULT NULL,
   `record` timestamp NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+
+--
+-- Dumping data for table `tbl_rekening`
+--
+
+INSERT INTO `tbl_rekening` (`id_rekening`, `no_rekening`, `nama_bank`, `atas_nama`, `record`) VALUES
+('RKN-0001', '1234-5678-9000', 'BCA', 'Toko Melly', '2024-05-24 12:51:01');
 
 -- --------------------------------------------------------
 
@@ -138,16 +139,25 @@ INSERT INTO `tbl_role` (`id_role`, `keterangan`, `record`) VALUES
 
 CREATE TABLE `tbl_transaksi` (
   `id_transaksi` varchar(20) NOT NULL,
-  `id_user` varchar(20) NOT NULL,
-  `id_pesanan` varchar(20) NOT NULL,
-  `id_barang` varchar(20) NOT NULL,
-  `total` int NOT NULL,
-  `metode` text NOT NULL,
-  `id_rekening` varchar(20) NOT NULL,
-  `image` text NOT NULL,
-  `status` enum('APP','PEN','REJ') NOT NULL,
-  `record` timestamp NOT NULL
+  `id_user` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `pesanan` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `total` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `metode` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `id_rekening` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `bukti` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `status` enum('APP','PEN','REJ') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `record` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `tbl_transaksi`
+--
+
+INSERT INTO `tbl_transaksi` (`id_transaksi`, `id_user`, `pesanan`, `total`, `metode`, `id_rekening`, `bukti`, `status`, `record`) VALUES
+('TRS-2405260001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+('TRS-2405262601', 'USR-0002', '[{\"pesanan\":\"BRG-0003\",\"qty\":\"5\"}]', '200.000', 'transfer', 'RKN-0001', 'bukti_tf_1541571851_aaa3d39f_progressive.jpg', 'PEN', '2024-05-26 11:06:43'),
+('TRS-2405262627', 'USR-0003', '[{\"pesanan\":\"CTK-0001\",\"qty\":\"5\"},{\"pesanan\":\"BRG-0001\",\"qty\":\"1\"}]', '9.500', 'transfer', 'RKN-0001', 'trusted_bukti_tf_1675081421_a695042b_progressive.jpg', 'PEN', '2024-05-26 11:19:56'),
+('TRS-2407160001', 'USR-0003', '[{\"pesanan\":\"BRG-0001\",\"qty\":\"1\"},{\"pesanan\":\"BRG-0002\",\"qty\":\"1\"}]', '6.300', 'transfer', 'RKN-0001', 'tf.jpeg', 'PEN', '2024-07-16 04:10:22');
 
 -- --------------------------------------------------------
 
@@ -261,12 +271,6 @@ ALTER TABLE `tbl_user`
 --
 -- AUTO_INCREMENT for dumped tables
 --
-
---
--- AUTO_INCREMENT for table `tbl_rekening`
---
-ALTER TABLE `tbl_rekening`
-  MODIFY `id_rekening` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tbl_role`

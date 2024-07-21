@@ -60,7 +60,7 @@
                                         <button class="btn btn-primary w-100" type="button" id="btnRegis">Registrasi Akun</button>
                                     </div>
                                     <div class="col-12">
-                                        <p class="small mb-0">Sudah punya akun? <a href="<?= base_url('Auth/pages?p=' . base64_encode('login')) ?>">Login yuks</a></p>
+                                        <p class="small mb-0">Sudah punya akun? <a href="<?= base_url('Auth/pages?p=' . base64_encode('login')) ?>">Login disini</a></p>
                                     </div>
                                 </form>
 

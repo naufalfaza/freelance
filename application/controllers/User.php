@@ -25,6 +25,8 @@ class User extends CI_Controller
             $this->load->view('structures/sidebarUser');
             $this->load->view('user/home');
             $this->load->view('structures/footer');
+        } else if ($sessionLogin == true && $sessionRole == 1) {
+            redirect(base_url("/Admin"));
         } else {
             $data = array(
                 "title" => "Home Page",
@@ -36,7 +38,6 @@ class User extends CI_Controller
             $this->load->view('structures/sidebarUser');
             $this->load->view('user/home');
             $this->load->view('structures/footer');
-            // redirect(base_url("/Auth"));
         }
     }
 
@@ -326,8 +327,8 @@ class User extends CI_Controller
             } else {
                 $span = '<span class="badge bg-danger">Pesanan Dibatalkan</span>';
             }
-            $btn = '<button type="button" class="btn btn-primary"><i class="bi bi-file-earmark-fill"></i></button>&nbsp;<button type="button" class="btn btn-success"><i class="bi bi-whatsapp"></i></button>';
-            array_push($array["data"], array($no++, date("d-m-Y", strtotime($dt->record)), "<ol>" . implode("\n", $items) . "</ol>", "<b>Rp. " . $dt->total . "</b>", $span, $btn));
+            $btn = '<button type="button" class="btn btn-primary"><i class="bi bi-file-earmark-fill"></i></button>&nbsp;<a href="https://wa.me/" target="_blank" class="btn btn-success"><i class="bi bi-whatsapp"></i></a>';
+            array_push($array["data"], array($no++, $dt->id_transaksi, date("d-m-Y", strtotime($dt->record)), "<ol>" . implode("\n", $items) . "</ol>", "<b>Rp. " . $dt->total . "</b>", $span, $btn));
         }
         echo json_encode($array);
     }

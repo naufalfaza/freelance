@@ -12,6 +12,7 @@
 
 <!-- Template Main JS File -->
 <script src="<?= base_url('/assets/js/main.js') ?>"></script>
+<?= $this->session->flashdata("alert") ?>
 
 </body>
 

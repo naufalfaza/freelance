@@ -11,7 +11,7 @@ $(document).ready(function () {
 
 	$("#tableProses").DataTable({
 		processing: true,
-		columnDefs: [{ className: "dt-center", targets: [0, 1, 3, 4, 5] }],
+		columnDefs: [{ className: "dt-center", targets: [0, 1, 2, 4, 5, 6] }],
 		fixedHeader: {
 			header: true,
 			footer: true,

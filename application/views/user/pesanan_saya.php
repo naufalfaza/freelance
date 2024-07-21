@@ -27,8 +27,9 @@
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
-                                            <th width="15%">Tanggal</th>
-                                            <th width="45%">Pesanan</th>
+                                            <th width="10%">No Transaksi</th>
+                                            <th width="10%">Tanggal</th>
+                                            <th width="40%">Pesanan</th>
                                             <th width="15%">Total</th>
                                             <th width="10%">Status</th>
                                             <th width="10%">Aksi</th>
@@ -59,7 +60,7 @@
                                             <th width="45%">Pesanan</th>
                                             <th width="15%">Total</th>
                                             <th width="10%">Status</th>
-                                            <th width="10%">Aksi</th>
+                                            <th width="10%">Keterangan</th>
                                         </tr>
                                     </thead>
                                 </table>

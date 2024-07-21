@@ -81,6 +81,12 @@ class Auth extends CI_Controller
                                 "message" => "Berhasil login!",
                                 "link" => "/User"
                             );
+                        } else {
+                            $data = array(
+                                "status" => true,
+                                "message" => "Berhasil login!",
+                                "link" => "/Owner"
+                            );
                         }
                     } else {
                         $data = array(

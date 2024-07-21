@@ -53,7 +53,7 @@
                                             <div class="col-12">
                                                 <label for="inputAddress" class="form-label">Metode Pembayaran</label>
                                                 <select class="form-select" aria-label="Default select example" id="metode" name="metode" autocomplete="off">
-                                                    <option selected="">Pilih Pembayaran</option>
+                                                    <option selected="" disabled>Pilih Pembayaran</option>
                                                     <option value="transfer">Transfer Bank</option>
                                                     <option value="qris">Qris</option>
                                                 </select>

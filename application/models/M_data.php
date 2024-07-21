@@ -12,7 +12,7 @@ class M_data extends CI_Model
     }
     // END CEK
 
-    // DATA
+    // DATA USER
     function dataUkuran()
     {
         $this->db->select("*");
@@ -40,6 +40,7 @@ class M_data extends CI_Model
     {
         $this->db->select("*");
         $this->db->from("tbl_barang");
+        $this->db->limit(6);
         return $this->db->get();
     }
 
@@ -80,6 +81,7 @@ class M_data extends CI_Model
         $this->db->select("*");
         $this->db->from("tbl_transaksi");
         $this->db->where("id_user='$id_user' AND status='PEN'");
+        $this->db->order_by("record", "DESC");
         return $this->db->get();
     }
 
@@ -98,7 +100,24 @@ class M_data extends CI_Model
         $this->db->where("id_user='$id_user' AND status='REJ'");
         return $this->db->get();
     }
-    // DATA END
+    // DATA USER END
+
+    // DATA ADMIN
+    function dataPengguna()
+    {
+        $this->db->select("*");
+        $this->db->from("tbl_user");
+        return $this->db->get();
+    }
+
+    function dataBarang()
+    {
+        $this->db->select("*");
+        $this->db->from("tbl_barang");
+        $this->db->order_by("record", "desc");
+        return $this->db->get();
+    }
+    // DATA ADMIN END
 
     // CRUD
     function getWhere($table, $data)
@@ -164,6 +183,16 @@ class M_data extends CI_Model
         $id = (int) substr($row->id, 8, 4);
         $id++;
         return $new = "TRS-$date" . sprintf("%04s", $id);
+    }
+
+    function generateIdBarang()
+    {
+        $this->db->select("(SELECT MAX(id_barang) FROM tbl_barang WHERE id_barang LIKE 'BRG-%') AS id", FALSE);
+        $query = $this->db->get();
+        $row = $query->row();
+        $id = (int) substr($row->id, 4, 4);
+        $id++;
+        return $new = "BRG-" . sprintf("%04s", $id);
     }
     // GENERATE END
 }
