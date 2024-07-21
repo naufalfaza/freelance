@@ -167,7 +167,7 @@ class Admin extends CI_Controller
                         </div>
                     </div>
                 </div>
-            </div><!-- End Basic Modal-->';
+            </div>';
             array_push(
                 $array["data"],
                 array(
@@ -267,5 +267,346 @@ class Admin extends CI_Controller
             );
         }
         echo json_encode($res);
+    }
+
+    public function getTransaksiProsesAll()
+    {
+        $array["data"] = array();
+        $get = $this->M_data->dataTransaksiProsesAll()->result();
+        $no = 1;
+        foreach ($get as $dt) {
+            $pesanan = json_decode($dt->pesanan, TRUE);
+            $items = [];
+            foreach ($pesanan as $item) {
+                if (substr($item['pesanan'], 0, 3) == "CTK") {
+                    $cetak = $this->M_data->getWhere("tbl_cetak", array("id_cetak" => $item['pesanan']))->row();
+                    $ukuran = $this->M_data->getWhere("tbl_ukuran", array("id_ukuran" => $cetak->id_ukuran))->row();
+                    $nm_pesanan = "Cetak Foto - " . $ukuran->ukuran;
+                    $link =  base_url("/assets/img/cetak/" . $cetak->image);
+                    $image = '<img src="' . $link . '" width="20%" style="float: left; padding-right: 10px;">';
+                    $download = '<a href="' . $link . '" download> Download Foto</a>';
+                } else {
+                    $barang = $this->M_data->getWhere("tbl_barang", array("id_barang" => $item['pesanan']))->row();
+                    $nm_pesanan = $barang->nm_barang;
+                    $link =  base_url("/assets/img/barang/" . $barang->image);
+                    $image = '<img src="' . $link . '" width="20%" style="float: left; padding-right: 10px;">';
+                    $download = '';
+                }
+                $items[] = '<li>' . $image . '<h6 style="text-align: left;"><b>' . $nm_pesanan . '</b><br> x' . $item['qty'] . '<br>' . $download . '</h6></li><br><br><br>';
+            }
+            if ($dt->status == "PEN") {
+                $span = '<span class="badge bg-warning text-dark">Pesanan Diproses</span>';
+            } else if ($dt->status == "APP") {
+                $span = '<span class="badge bg-success">Pesanan Selesai</span>';
+            } else {
+                $span = '<span class="badge bg-danger">Pesanan Dibatalkan</span>';
+            }
+            $btn = '<button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#basicModal' . $dt->id_transaksi . '">
+                <i class="bi bi-info-circle"></i>
+            </button>
+            <div class="modal fade" id="basicModal' . $dt->id_transaksi . '" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><b>Detail Transaksi - </b><small>' . $dt->id_transaksi . '</small></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group row">
+                                <form action="' . base_url("Admin/updateTransaksi") . '" method="POST" enctype="multipart/form-data">
+                                    <div class="col-lg-12">
+                                        <div class="form-group row">
+                                            <div class="col-lg-3">
+                                                <h4>Foto Bukti</h4><hr> 
+                                                <div class="form-group row">
+                                                    <img src="' . base_url("/assets/img/bukti_tf/" . $dt->bukti) . '" width="100%">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-9">
+                                                <h4>Info Pembeli</h4><hr> 
+                                                <div class="form-group row">
+                                                    <label class="col-lg-4" style="text-align: left;">Nama Lengkap</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" value="' . $dt->nama . '" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12"><br></div>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-4" style="text-align: left;">Email</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" value="' . $dt->email . '" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12"><br></div>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-4" style="text-align: left;">No Telepon</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" value="' . $dt->no_telp . '" disabled>
+                                                    </div>
+                                                </div>
+                                                <hr><h4>Info Pesanan</h4><hr> 
+                                                <div class="form-group row">
+                                                    ' . "<ol>" . implode("\n", $items) . "</ol>" . '
+                                                </div>
+                                                <hr>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-4" style="text-align: left;">Keterangan</label>
+                                                    <div class="col-lg-8">
+                                                        <textarea class="form-control" placeholder="..." name="keterangan"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <hr>
+                                                <input type="hidden" class="form-control" name="id_transaksi" id="id_transaksi" value="' . $dt->id_transaksi . '">
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group row">
+                                                    <button type="submit" name="btnSubmit" value="APP" class="btn btn-outline-success col-6"><i class="bi bi-check me-1"></i> Selesaikan Pesanan</button>
+                                                    <button type="submit" name="btnSubmit" value="REJ" class="btn btn-outline-danger col-6"><i class="bi bi-x me-1"></i> Batalkan Pesanan</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>';
+            array_push($array["data"], array($no++, $dt->id_transaksi, date("d-m-Y", strtotime($dt->record)), "<b>$dt->nama</b>", "<b>Rp. " . $dt->total . "</b>", $span, $btn));
+        }
+        echo json_encode($array);
+    }
+
+    public function getTransaksiSelesaiAll()
+    {
+        $array["data"] = array();
+        $get = $this->M_data->dataTransaksiSelesaiAll()->result();
+        $no = 1;
+        foreach ($get as $dt) {
+            $pesanan = json_decode($dt->pesanan, TRUE);
+            $items = [];
+            foreach ($pesanan as $item) {
+                if (substr($item['pesanan'], 0, 3) == "CTK") {
+                    $cetak = $this->M_data->getWhere("tbl_cetak", array("id_cetak" => $item['pesanan']))->row();
+                    $ukuran = $this->M_data->getWhere("tbl_ukuran", array("id_ukuran" => $cetak->id_ukuran))->row();
+                    $nm_pesanan = "Cetak Foto - " . $ukuran->ukuran;
+                    $link =  base_url("/assets/img/cetak/" . $cetak->image);
+                    $image = '<img src="' . $link . '" width="20%" style="float: left; padding-right: 10px;">';
+                    $download = '<a href="' . $link . '" download> Download Foto</a>';
+                } else {
+                    $barang = $this->M_data->getWhere("tbl_barang", array("id_barang" => $item['pesanan']))->row();
+                    $nm_pesanan = $barang->nm_barang;
+                    $link =  base_url("/assets/img/barang/" . $barang->image);
+                    $image = '<img src="' . $link . '" width="20%" style="float: left; padding-right: 10px;">';
+                    $download = '';
+                }
+                $items[] = '<li>' . $image . '<h6 style="text-align: left;"><b>' . $nm_pesanan . '</b><br> x' . $item['qty'] . '<br>' . $download . '</h6></li><br><br><br>';
+            }
+            if ($dt->status == "PEN") {
+                $span = '<span class="badge bg-warning text-dark">Pesanan Diproses</span>';
+            } else if ($dt->status == "APP") {
+                $span = '<span class="badge bg-success">Pesanan Selesai</span>';
+            } else {
+                $span = '<span class="badge bg-danger">Pesanan Dibatalkan</span>';
+            }
+            $btn = '<button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#basicModal' . $dt->id_transaksi . '">
+                <i class="bi bi-info-circle"></i>
+            </button>
+            <div class="modal fade" id="basicModal' . $dt->id_transaksi . '" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><b>Detail Transaksi - </b><small>' . $dt->id_transaksi . '</small></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group row">
+                                <form action="' . base_url("Admin/updateTransaksi") . '" method="POST" enctype="multipart/form-data">
+                                    <div class="col-lg-12">
+                                        <div class="form-group row">
+                                            <div class="col-lg-3">
+                                                <h4>Foto Bukti</h4><hr> 
+                                                <div class="form-group row">
+                                                    <img src="' . base_url("/assets/img/bukti_tf/" . $dt->bukti) . '" width="100%">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-9">
+                                                <h4>Info Pembeli</h4><hr> 
+                                                <div class="form-group row">
+                                                    <label class="col-lg-4" style="text-align: left;">Nama Lengkap</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" value="' . $dt->nama . '" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12"><br></div>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-4" style="text-align: left;">Email</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" value="' . $dt->email . '" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12"><br></div>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-4" style="text-align: left;">No Telepon</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" value="' . $dt->no_telp . '" disabled>
+                                                    </div>
+                                                </div>
+                                                <hr><h4>Info Pesanan</h4><hr> 
+                                                <div class="form-group row">
+                                                    ' . "<ol>" . implode("\n", $items) . "</ol>" . '
+                                                </div>
+                                                <hr>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-4" style="text-align: left;">Keterangan</label>
+                                                    <div class="col-lg-8">
+                                                        <textarea class="form-control" name="keterangan">' . $dt->keterangan . '</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <hr>
+                                                <input type="hidden" class="form-control" name="id_transaksi" id="id_transaksi" value="' . $dt->id_transaksi . '">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>';
+            array_push($array["data"], array($no++, $dt->id_transaksi, date("d-m-Y", strtotime($dt->record)), "<b>$dt->nama</b>", "<b>Rp. " . $dt->total . "</b>", $span, $btn));
+        }
+        echo json_encode($array);
+    }
+
+    public function getTransaksiBatalAll()
+    {
+        $array["data"] = array();
+        $get = $this->M_data->dataTransaksiBatalAll()->result();
+        $no = 1;
+        foreach ($get as $dt) {
+            $pesanan = json_decode($dt->pesanan, TRUE);
+            $items = [];
+            foreach ($pesanan as $item) {
+                if (substr($item['pesanan'], 0, 3) == "CTK") {
+                    $cetak = $this->M_data->getWhere("tbl_cetak", array("id_cetak" => $item['pesanan']))->row();
+                    $ukuran = $this->M_data->getWhere("tbl_ukuran", array("id_ukuran" => $cetak->id_ukuran))->row();
+                    $nm_pesanan = "Cetak Foto - " . $ukuran->ukuran;
+                    $link =  base_url("/assets/img/cetak/" . $cetak->image);
+                    $image = '<img src="' . $link . '" width="20%" style="float: left; padding-right: 10px;">';
+                    $download = '<a href="' . $link . '" download> Download Foto</a>';
+                } else {
+                    $barang = $this->M_data->getWhere("tbl_barang", array("id_barang" => $item['pesanan']))->row();
+                    $nm_pesanan = $barang->nm_barang;
+                    $link =  base_url("/assets/img/barang/" . $barang->image);
+                    $image = '<img src="' . $link . '" width="20%" style="float: left; padding-right: 10px;">';
+                    $download = '';
+                }
+                $items[] = '<li>' . $image . '<h6 style="text-align: left;"><b>' . $nm_pesanan . '</b><br> x' . $item['qty'] . '<br>' . $download . '</h6></li><br><br><br>';
+            }
+            if ($dt->status == "PEN") {
+                $span = '<span class="badge bg-warning text-dark">Pesanan Diproses</span>';
+            } else if ($dt->status == "APP") {
+                $span = '<span class="badge bg-success">Pesanan Selesai</span>';
+            } else {
+                $span = '<span class="badge bg-danger">Pesanan Dibatalkan</span>';
+            }
+            $btn = '<button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#basicModal' . $dt->id_transaksi . '">
+                <i class="bi bi-info-circle"></i>
+            </button>
+            <div class="modal fade" id="basicModal' . $dt->id_transaksi . '" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><b>Detail Transaksi - </b><small>' . $dt->id_transaksi . '</small></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group row">
+                                <form action="' . base_url("Admin/updateTransaksi") . '" method="POST" enctype="multipart/form-data">
+                                    <div class="col-lg-12">
+                                        <div class="form-group row">
+                                            <div class="col-lg-3">
+                                                <h4>Foto Bukti</h4><hr> 
+                                                <div class="form-group row">
+                                                    <img src="' . base_url("/assets/img/bukti_tf/" . $dt->bukti) . '" width="100%">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-9">
+                                                <h4>Info Pembeli</h4><hr> 
+                                                <div class="form-group row">
+                                                    <label class="col-lg-4" style="text-align: left;">Nama Lengkap</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" value="' . $dt->nama . '" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12"><br></div>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-4" style="text-align: left;">Email</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" value="' . $dt->email . '" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12"><br></div>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-4" style="text-align: left;">No Telepon</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" value="' . $dt->no_telp . '" disabled>
+                                                    </div>
+                                                </div>
+                                                <hr><h4>Info Pesanan</h4><hr> 
+                                                <div class="form-group row">
+                                                    ' . "<ol>" . implode("\n", $items) . "</ol>" . '
+                                                </div>
+                                                <hr>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-4" style="text-align: left;">Keterangan</label>
+                                                    <div class="col-lg-8">
+                                                        <textarea class="form-control" placeholder="..." name="keterangan"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <hr>
+                                                <input type="hidden" class="form-control" name="id_transaksi" id="id_transaksi" value="' . $dt->id_transaksi . '">
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group row">
+                                                    <button type="submit" name="btnSubmit" value="APP" class="btn btn-outline-success col-6"><i class="bi bi-check me-1"></i> Selesaikan Pesanan</button>
+                                                    <button type="submit" name="btnSubmit" value="REJ" class="btn btn-outline-danger col-6"><i class="bi bi-x me-1"></i> Batalkan Pesanan</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>';
+            array_push($array["data"], array($no++, $dt->id_transaksi, date("d-m-Y", strtotime($dt->record)), "<b>$dt->nama</b>", "<b>Rp. " . $dt->total . "</b>", $span, $dt->keterangan));
+        }
+        echo json_encode($array);
+    }
+
+    public function updateTransaksi()
+    {
+        $id_transaksi = $this->input->post("id_transaksi");
+        $keterangan = $this->input->post("keterangan");
+        $btn = $this->input->post("btnSubmit");
+        if ($btn == "APP") {
+            $status = "APP";
+        } else {
+            $status = "REJ";
+        }
+        $update = array("status" => $status, "keterangan" => $keterangan);
+        $where = array("id_transaksi" => $id_transaksi);
+        $this->M_data->updateData("tbl_transaksi", $update, $where);
+        $this->session->set_flashdata("alert", '<script>$(document).ready(function(){Swal.fire({icon: "success",title: "Berhasil Dirubah!",showConfirmButton: false,timer: 1500,});});</script>');
+        redirect(base_url("Admin/pages?p=" . base64_encode("transaksi")));
     }
 }

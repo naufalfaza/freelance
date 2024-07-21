@@ -76,6 +76,16 @@ class M_data extends CI_Model
         return $this->db->get();
     }
 
+    function dataTransaksiProsesAll()
+    {
+        $this->db->select("id_transaksi, tbl_transaksi.record, pesanan, total, tbl_transaksi.status, bukti, nama, email, no_telp");
+        $this->db->from("tbl_transaksi");
+        $this->db->join("tbl_user", "tbl_user.id_user=tbl_transaksi.id_user", "left");
+        $this->db->where("tbl_transaksi.status='PEN'");
+        $this->db->order_by("tbl_transaksi.record", "DESC");
+        return $this->db->get();
+    }
+
     function dataTransaksiProses($id_user)
     {
         $this->db->select("*");
@@ -85,11 +95,31 @@ class M_data extends CI_Model
         return $this->db->get();
     }
 
+    function dataTransaksiSelesaiAll()
+    {
+        $this->db->select("id_transaksi, tbl_transaksi.record, pesanan, total, tbl_transaksi.status, bukti, nama, email, no_telp, tbl_transaksi.keterangan");
+        $this->db->from("tbl_transaksi");
+        $this->db->join("tbl_user", "tbl_user.id_user=tbl_transaksi.id_user", "left");
+        $this->db->where("tbl_transaksi.status='APP'");
+        $this->db->order_by("tbl_transaksi.record", "DESC");
+        return $this->db->get();
+    }
+
     function dataTransaksiSelesai($id_user)
     {
         $this->db->select("*");
         $this->db->from("tbl_transaksi");
         $this->db->where("id_user='$id_user' AND status='APP'");
+        return $this->db->get();
+    }
+
+    function dataTransaksiBatalAll()
+    {
+        $this->db->select("id_transaksi, tbl_transaksi.record, pesanan, total, tbl_transaksi.status, bukti, nama, email, no_telp, tbl_transaksi.keterangan");
+        $this->db->from("tbl_transaksi");
+        $this->db->join("tbl_user", "tbl_user.id_user=tbl_transaksi.id_user", "left");
+        $this->db->where("tbl_transaksi.status='REJ'");
+        $this->db->order_by("tbl_transaksi.record", "DESC");
         return $this->db->get();
     }
 

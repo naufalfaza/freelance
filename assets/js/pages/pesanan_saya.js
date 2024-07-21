@@ -21,7 +21,7 @@ $(document).ready(function () {
 
 	$("#tableSelesai").DataTable({
 		processing: true,
-		columnDefs: [{ className: "dt-center", targets: "_all" }],
+		columnDefs: [{ className: "dt-center", targets: [0, 1, 2, 4, 5, 6] }],
 		fixedHeader: {
 			header: true,
 			footer: true,
@@ -31,7 +31,7 @@ $(document).ready(function () {
 
 	$("#tableBatal").DataTable({
 		processing: true,
-		columnDefs: [{ className: "dt-center", targets: "_all" }],
+		columnDefs: [{ className: "dt-center", targets: [0, 1, 2, 4, 5, 6] }],
 		fixedHeader: {
 			header: true,
 			footer: true,

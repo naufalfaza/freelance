@@ -364,7 +364,8 @@ class User extends CI_Controller
             } else {
                 $span = '<span class="badge bg-danger">Pesanan Dibatalkan</span>';
             }
-            array_push($array["data"], array($no++, date("d-m-Y", strtotime($dt->record)), "<ol>" . implode("\n", $items) . "</ol>", "<b>Rp. " . $dt->total . "</b>", $span, ""));
+            $btn = '<button type="button" class="btn btn-primary"><i class="bi bi-file-earmark-fill"></i></button>';
+            array_push($array["data"], array($no++, $dt->id_transaksi, date("d-m-Y", strtotime($dt->record)), "<ol>" . implode("\n", $items) . "</ol>", "<b>Rp. " . $dt->total . "</b>", $span, $btn));
         }
         echo json_encode($array);
     }
@@ -400,7 +401,7 @@ class User extends CI_Controller
             } else {
                 $span = '<span class="badge bg-danger">Pesanan Dibatalkan</span>';
             }
-            array_push($array["data"], array($no++, date("d-m-Y", strtotime($dt->record)), "<ol>" . implode("\n", $items) . "</ol>", "<b>Rp. " . $dt->total . "</b>", $span, ""));
+            array_push($array["data"], array($no++, $dt->id_transaksi, date("d-m-Y", strtotime($dt->record)), "<ol>" . implode("\n", $items) . "</ol>", "<b>Rp. " . $dt->total . "</b>", $span, $dt->keterangan));
         }
         echo json_encode($array);
     }
