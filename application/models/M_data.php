@@ -76,6 +76,16 @@ class M_data extends CI_Model
         return $this->db->get();
     }
 
+    function dataTransaksiById($id_transaksi)
+    {
+        $this->db->select("id_transaksi, tbl_transaksi.record, pesanan, total, tbl_transaksi.status, bukti, nama, email, no_telp, tbl_transaksi.keterangan");
+        $this->db->from("tbl_transaksi");
+        $this->db->join("tbl_user", "tbl_user.id_user=tbl_transaksi.id_user", "left");
+        $this->db->where("tbl_transaksi.id_transaksi='$id_transaksi'");
+        $this->db->order_by("tbl_transaksi.record", "DESC");
+        return $this->db->get();
+    }
+
     function dataTransaksiProsesAll()
     {
         $this->db->select("id_transaksi, tbl_transaksi.record, pesanan, total, tbl_transaksi.status, bukti, nama, email, no_telp");

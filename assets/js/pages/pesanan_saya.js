@@ -11,6 +11,7 @@ $(document).ready(function () {
 
 	$("#tableProses").DataTable({
 		processing: true,
+		autoWidth: false,
 		columnDefs: [{ className: "dt-center", targets: [0, 1, 2, 4, 5, 6] }],
 		fixedHeader: {
 			header: true,
@@ -21,6 +22,7 @@ $(document).ready(function () {
 
 	$("#tableSelesai").DataTable({
 		processing: true,
+		autoWidth: false,
 		columnDefs: [{ className: "dt-center", targets: [0, 1, 2, 4, 5, 6] }],
 		fixedHeader: {
 			header: true,
@@ -31,6 +33,7 @@ $(document).ready(function () {
 
 	$("#tableBatal").DataTable({
 		processing: true,
+		autoWidth: false,
 		columnDefs: [{ className: "dt-center", targets: [0, 1, 2, 4, 5, 6] }],
 		fixedHeader: {
 			header: true,
